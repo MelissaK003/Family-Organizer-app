@@ -29,7 +29,7 @@ You can view the demo video at [Demo Video](https://drive.google.com/file/d/1GF_
 
 ## Known Bugs
 The application has a few known bugs:
-- The Grocery list, Tasks, and Event dates cannot be edited or updated.
+- The Grocery list, Tasks Deadline and Event dates cannot be edited or updated.
 - Assigned tasks cannot be deleted.
 
 ## Technologies Used
