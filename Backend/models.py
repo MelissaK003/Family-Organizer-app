@@ -12,7 +12,7 @@ class User(db.Model):
     full_name = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False, unique=True)
     role = db.Column(db.String(128), nullable=False)
-    password = db.Column(db.String(128), nullable=False)
+    password = db.Column(db.String(512), nullable=False)
 
     tasks = db.relationship('Task', backref='user', lazy=True)
     events = db.relationship('Event', backref='user', lazy=True)

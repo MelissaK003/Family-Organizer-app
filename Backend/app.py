@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 CORS(app)
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///family.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://little_helper_user:2kqzVra2nCZIGoYOwImzTGWsjKx97eWv@dpg-cuftrptds78s73fp8aag-a.oregon-postgres.render.com/little_helper'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 migrate = Migrate(app, db)
