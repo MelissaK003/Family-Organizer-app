@@ -52,6 +52,6 @@ The application has a few known bugs:
 Email: [Melissakiptoo@gmail.com](mailto:Melissakiptoo@gmail.com)
 
 ### License
-Licensed under the MIT License https://github.com/MelissaK003/Family-Organizer-app/blob/master/LICENSE
+Licensed under the MIT License [LICENSE](https://github.com/MelissaK003/Family-Organizer-app/blob/master/LICENSE)
 
 Copyright (c) 2024 **Melissa Kiptoo**
