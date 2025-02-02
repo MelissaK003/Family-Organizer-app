@@ -12,7 +12,7 @@ export const EventProvider = ({ children }) => {
     const fetchEvents = async () => {
         if (!current_user) return;
         try {
-            const response = await fetch('http://127.0.0.1:5000/events', {
+            const response = await fetch('https://family-organizer-app.onrender.com/events', {
                 headers: { 
                     'Authorization': `Bearer ${authToken}`, 
                     'Content-Type': 'application/json' }
@@ -29,7 +29,7 @@ export const EventProvider = ({ children }) => {
     const UserAttendingEvents = async () => {
         if (!current_user) return;
         try {
-            const response = await fetch(`http://127.0.0.1:5000/event_attendances/user/${current_user.id}`, {
+            const response = await fetch(`https://family-organizer-app.onrender.com/event_attendances/user/${current_user.id}`, {
                 headers: { 
                     'Authorization': `Bearer ${authToken}`, 
                     'Content-Type': 'application/json' }
@@ -45,7 +45,7 @@ export const EventProvider = ({ children }) => {
 
     const addEvent = async (title, description, event_date, user_id) => {
         try {
-            const response = await fetch('http://127.0.0.1:5000/event', {
+            const response = await fetch('https://family-organizer-app.onrender.com/event', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json', 
@@ -64,7 +64,7 @@ export const EventProvider = ({ children }) => {
 
     const EventAttendanceStatus = async (eventId) => {
         try {
-            const response = await fetch(`http://127.0.0.1:5000/event_attendance/${eventId}`, {
+            const response = await fetch(`https://family-organizer-app.onrender.com/event_attendance/${eventId}`, {
                 method: 'POST',
                 headers: { 
                     'Authorization': `Bearer ${authToken}`, 
@@ -84,7 +84,7 @@ export const EventProvider = ({ children }) => {
 
     const deleteEvent = async (eventId) => {
         try {
-            const response = await fetch(`http://127.0.0.1:5000/event/${eventId}`, {
+            const response = await fetch(`https://family-organizer-app.onrender.com/event/${eventId}`, {
                 method: 'DELETE',
                 headers: { 
                     'Authorization': `Bearer ${authToken}`

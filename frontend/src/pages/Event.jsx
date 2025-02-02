@@ -30,7 +30,7 @@ const Events = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/event', {
+      const response = await fetch('https://family-organizer-app.onrender.com/event', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ const Events = () => {
   const handleDelete = async (eventId) => {
     if (window.confirm('Are you sure you want to delete this event?')) {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/event/${eventId}`, {
+        const response = await fetch(`https://family-organizer-app.onrender.com/event/${eventId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${authToken}`

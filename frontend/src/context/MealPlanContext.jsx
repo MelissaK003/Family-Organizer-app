@@ -11,7 +11,7 @@ export const MealPlanProvider = ({ children }) => {
     // Fetch all meal plans
     const fetchMealPlans = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:5000/mealplans', {
+            const response = await fetch('https://family-organizer-app.onrender.com/mealplans', {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -31,7 +31,7 @@ export const MealPlanProvider = ({ children }) => {
     // Update meal plan
     const updateMealPlan = async (mealplanId, tag, description, day) => {
         try {
-            const response = await fetch(`http://127.0.0.1:5000/mealplan/${mealplanId}`, {
+            const response = await fetch(`https://family-organizer-app.onrender.com/mealplan/${mealplanId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ export const MealPlanProvider = ({ children }) => {
                 return updateMealPlan(existingMeal.id, tag, description, day); 
             }
 
-            const response = await fetch('http://127.0.0.1:5000/mealplan', {
+            const response = await fetch('https://family-organizer-app.onrender.com/mealplan', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ export const MealPlanProvider = ({ children }) => {
     // Delete meal plan
     const deleteMealPlan = async (mealplanId) => {
         try {
-            const response = await fetch(`http://127.0.0.1:5000/mealplan/${mealplanId}`, {
+            const response = await fetch(`https://family-organizer-app.onrender.com/mealplan/${mealplanId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${authToken}`

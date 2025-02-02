@@ -10,7 +10,7 @@ export const TaskProvider = ({ children }) => {
 
     const fetchTasks = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:5000/tasks', {
+            const response = await fetch('https://family-organizer-app.onrender.com/tasks', {
                 headers: { 
                     'Authorization': `Bearer ${authToken}`
                  }
@@ -24,7 +24,7 @@ export const TaskProvider = ({ children }) => {
 
     const addTask = async (title, description, deadline, assigned_to) => {
         try {
-            const response = await fetch('http://127.0.0.1:5000/task', {
+            const response = await fetch('https://family-organizer-app.onrender.com/task', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json', 
@@ -40,7 +40,7 @@ export const TaskProvider = ({ children }) => {
 
     const updateTask = async (taskId, updateData) => {
         try {
-            const response = await fetch(`http://127.0.0.1:5000/task/${taskId}`, {
+            const response = await fetch(`https://family-organizer-app.onrender.com/task/${taskId}`, {
                 method: 'PATCH',
                 headers: { 
                     'Content-Type': 'application/json', 
@@ -58,7 +58,7 @@ export const TaskProvider = ({ children }) => {
 
     const deleteTask = async (taskId) => {
         try {
-            const response = await fetch(`http://127.0.0.1:5000/task/${taskId}`, {
+            const response = await fetch(`https://family-organizer-app.onrender.com/task/${taskId}`, {
                 method: 'DELETE',
                 headers: { 
                     'Authorization': `Bearer ${authToken}`

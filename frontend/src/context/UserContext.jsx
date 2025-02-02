@@ -12,7 +12,7 @@ export const UserProvider = ({ children }) => {
     // LOGIN
     const login = (email, password) => {
         toast.loading("Logging you in...");
-        fetch("http://127.0.0.1:5000/login", {
+        fetch("https://family-organizer-app.onrender.com/login", {
             method: "POST",
             headers: {
                 'Content-type': 'application/json',
@@ -26,7 +26,7 @@ export const UserProvider = ({ children }) => {
                 sessionStorage.setItem("token", response.access_token);
                 setAuthToken(response.access_token);
 
-                fetch('http://127.0.0.1:5000/current_user', {
+                fetch('https://family-organizer-app.onrender.com/current_user', {
                     method: "GET",
                     headers: {
                         'Content-type': 'application/json',
@@ -58,7 +58,7 @@ export const UserProvider = ({ children }) => {
 
     const logout = async () => {
         toast.loading("Logging out...");
-        fetch("http://127.0.0.1:5000/logout", {
+        fetch("https://family-organizer-app.onrender.com/logout", {
             method: "DELETE",
             headers: {
                 'Content-type': 'application/json',
@@ -92,7 +92,7 @@ export const UserProvider = ({ children }) => {
     }, [authToken]);
 
     const fetchCurrentUser = () => {
-        fetch('http://127.0.0.1:5000/current_user', {
+        fetch('https://family-organizer-app.onrender.com/current_user', {
             method: "GET",
             headers: {
                 'Content-type': 'application/json',
@@ -115,7 +115,7 @@ export const UserProvider = ({ children }) => {
     const addUser = (full_name, email, role, password) => {
         console.log("Registering user with:", { full_name, email, role }); 
         toast.loading("Registering...");
-        fetch("http://127.0.0.1:5000/users", {
+        fetch("https://family-organizer-app.onrender.com/users", {
             method: "POST",
             headers: {
                 'Content-type': 'application/json',

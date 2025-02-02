@@ -11,7 +11,7 @@ export function ShoppingListProvider({ children }) {
 
   const fetchShoppingLists = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/shoppinglists');
+      const response = await fetch('https://family-organizer-app.onrender.com/shoppinglists');
       if (response.ok) {
         const data = await response.json();
       
@@ -34,7 +34,7 @@ export function ShoppingListProvider({ children }) {
   // Add a new shopping list
   const addShoppingList = async (title, items) => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/shoppinglist', {
+      const response = await fetch('https://family-organizer-app.onrender.com/shoppinglist', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export function ShoppingListProvider({ children }) {
       const list = shoppingLists.find(l => l.id === listId);
       const item = list.items[itemIndex];
 
-      const response = await fetch(`http://127.0.0.1:5000/shoppinglist/${listId}`, {
+      const response = await fetch(`https://family-organizer-app.onrender.com/shoppinglist/${listId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export function ShoppingListProvider({ children }) {
   // Remove item from shopping list
   const removeItem = async (listId, itemIndex) => {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/shoppinglist/${listId}`, {
+      const response = await fetch(`https://family-organizer-app.onrender.com/shoppinglist/${listId}`, {
         method: 'DELETE',
       });
 
