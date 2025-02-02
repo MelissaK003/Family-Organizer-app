@@ -16,13 +16,13 @@ The Family Organizer app is designed to help families manage their day-to-day ta
 This application streamlines communication and collaboration within families by providing a centralized platform for organizing tasks and events.
 
 ## Setup/Installation Instructions
-1. Get access to the GitHub link for the Family Organizer app.
+1. Get access to the Domain link for the Family Organizer app.
 2. Open the app link in your web browser (e.g., Chrome).
-3. Start browsing, creating itineraries, and managing your family's activities.
+3. Start browsing, creating and managing your family's activities.
 4. And you are all done!
 
 ## Live Server
-You can view the web live at [Family Organizer App](https://github.com/MelissaK003/Family-Organizer-app).
+You can view the web live at [Family Organizer App](https://little-helper-drab.vercel.app/).
 
 ## Demonstration Link
 You can view the demo video at [Demo Video](https://drive.google.com/file/d/1GF_CShPnRj11wmWEq1pBQ_DUEzjzShOB/view).
@@ -40,6 +40,8 @@ The application has a few known bugs:
 - JSX
 - Tailwind CSS
 - Render
+- Vercel
+- React
 - JSON
 - Python
 - Flask API
