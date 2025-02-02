@@ -10,7 +10,7 @@ export default function Task() {
     title: '',
     description: '',
     deadline: '',
-    assigned_to: '' // Now using full_name instead of user ID
+    assigned_to: '' 
   });
 
   const handleInputChange = (e) => {
@@ -25,7 +25,7 @@ export default function Task() {
         newTask.title,
         newTask.description,
         newTask.deadline,
-        newTask.assigned_to // Sending full name to the backend
+        newTask.assigned_to 
       );
       // Reset form
       setNewTask({

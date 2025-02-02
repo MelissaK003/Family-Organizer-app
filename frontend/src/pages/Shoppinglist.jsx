@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ShoppingListContext } from "../context/ShoppingListContext";
 
 export default function Shopping() {
@@ -6,6 +6,7 @@ export default function Shopping() {
   const [selectedList, setSelectedList] = useState(null);
   const [newListTitle, setNewListTitle] = useState("");
   const [newItems, setNewItems] = useState([{ name: "", quantity: 1 }]);
+  const [error, setError] = useState("");
 
   const handleAddItem = () => {
     setNewItems([...newItems, { name: "", quantity: 1 }]);
@@ -18,22 +19,38 @@ export default function Shopping() {
     setNewItems(updatedItems);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
     if (newListTitle && newItems.some(item => item.name.trim() !== "")) {
-      addShoppingList(newListTitle, newItems);
-      setNewListTitle("");
-      setNewItems([{ name: "", quantity: 1 }]);
+      try {
+        await addShoppingList(newListTitle, newItems);
+        setNewListTitle("");
+        setNewItems([{ name: "", quantity: 1 }]);
+      } catch (err) {
+        setError("Failed to add shopping list. Please try again.");
+      }
     }
   };
 
-  const handleRemoveItem = (listId, itemIndex) => {
-    removeItem(listId, itemIndex);
+  const handleRemoveItem = async (listId, itemIndex) => {
+    try {
+      await removeItem(listId, itemIndex);
+    } catch (err) {
+      setError("Failed to remove item. Please try again.");
+    }
   };
 
   return (
     <div className="p-6 bg-yellow-100 rounded-lg shadow-md">
       <h1 className="text-2xl font-bold text-center mb-4">Shopping Lists</h1>
+      
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+      )}
 
       {/* Shopping List Titles */}
       <div className="mb-6">
@@ -43,7 +60,7 @@ export default function Shopping() {
             {shoppingLists.map((list) => (
               <li
                 key={list.id}
-                className="p-2 bg-yellow-500 rounded cursor-pointer hover:bg-gray-300"
+                className="p-5 bg-yellow-500 rounded cursor-pointer hover:bg-gray-300"
                 onClick={() => setSelectedList(list)}
               >
                 {list.title}
@@ -109,7 +126,7 @@ export default function Shopping() {
               placeholder="Quantity"
               min="1"
               value={item.quantity}
-              onChange={(e) => handleItemChange(index, "quantity", e.target.value)}
+              onChange={(e) => handleItemChange(index, "quantity", parseInt(e.target.value))}
               className="p-2 border rounded w-24"
             />
           </div>

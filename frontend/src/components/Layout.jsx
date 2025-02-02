@@ -16,7 +16,7 @@ export default function Layout() {
         <ToastContainer />
       </main>
 
-      <footer className="mt-auto">
+      <footer>
         <Footer />
       </footer>
     </div>

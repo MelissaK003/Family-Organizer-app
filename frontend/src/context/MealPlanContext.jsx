@@ -28,6 +28,36 @@ export const MealPlanProvider = ({ children }) => {
         }
     };
 
+    // Update meal plan
+    const updateMealPlan = async (mealplanId, tag, description, day) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:5000/mealplan/${mealplanId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+                body: JSON.stringify({
+                    tag,
+                    description,
+                    day,
+                    user_id: current_user?.id
+                })
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                toast.success(data.success);
+                fetchMealPlans();
+            } else {
+                toast.error(data.error || 'Failed to update meal plan');
+            }
+        } catch (error) {
+            console.error('Error updating meal plan:', error);
+            toast.error('Network error while updating meal plan');
+        }
+    };
+
     // Add new meal plan or update existing one
     const addMealPlan = async (tag, description, day) => {
         try {
@@ -87,37 +117,6 @@ export const MealPlanProvider = ({ children }) => {
         }
     };
 
-    // Update meal plan
-    const updateMealPlan = async (mealplanId, tag, description, day) => {
-        try {
-            const response = await fetch(`http://127.0.0.1:5000/mealplan/${mealplanId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authToken}`
-                },
-                body: JSON.stringify({
-                    tag,
-                    description,
-                    day,
-                    user_id: current_user?.id
-                })
-            });
-            const data = await response.json();
-
-            if (response.ok) {
-                toast.success(data.success);
-                fetchMealPlans();
-            } else {
-                toast.error(data.error || 'Failed to update meal plan');
-            }
-        } catch (error) {
-            console.error('Error updating meal plan:', error);
-            toast.error('Network error while updating meal plan');
-        }
-    };
-
-    // Fetch meal plans when component changes
     useEffect(() => {
         if (authToken) {
             fetchMealPlans();

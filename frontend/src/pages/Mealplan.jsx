@@ -44,7 +44,7 @@ export default function MealPlan() {
                                             onClick={() => deleteMealPlan(meals.find(meal => meal.tag === mealType).id)}
                                             className="ml-2 text-red-500 text-xl"
                                         >
-                                            &times; {/* Using the "×" character for delete */}
+                                            &times; {/*  delete */}
                                         </button>
                                     )}
                                 </td>

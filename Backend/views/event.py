@@ -14,17 +14,13 @@ def fetch_events():
     event_list = []
     
     for event in events:
-        is_attending = EventAttendance.query.filter_by(
-            event_id=event.id, 
-            user_id=user_id, 
-            is_attending=True
-        ).first() is not None
+        is_attending = EventAttendance.query.filter_by(event_id=event.id, user_id=user_id,is_attending=True).first() 
         
         event_list.append({
             'id': event.id,
             'title': event.title,
             'description': event.description,
-            'event_date': event.event_date.strftime("%Y-%m-%d"),
+            'event_date': event.event_date,
             'created_by': event.created_by,
             'is_attending': is_attending
         })
@@ -87,20 +83,10 @@ def update_event(event_id):
     else:
         return jsonify({"error": "Event not found!"}), 404
     
-#Delete Event
-@event_bp.route("/event/<int:event_id>", methods=["DELETE"])
-def delete_event(event_id):
-    event = Event.query.get(event_id)
 
-    if event:
-        db.session.delete(event)
-        db.session.commit()
-        return jsonify({"success": "Deleted successfully"}), 200
-    else:
-        return jsonify({"error": "Event doesn't exist!"}), 404   
-    
+ #Update Event Attendance 
 @event_bp.route("/event_attendance/<int:event_id>", methods=["POST"])
-def toggle_attendance(event_id):
+def attendance_status(event_id):
     data = request.get_json()
     user_id = data.get('user_id')
     
@@ -111,17 +97,12 @@ def toggle_attendance(event_id):
     if not event:
         return jsonify({"error": "Event not found"}), 404
     
-    existing_attendance = EventAttendance.query.filter_by(
-        event_id=event_id,
-        user_id=user_id
-    ).first()
+    existing_attendance = EventAttendance.query.filter_by(event_id=event_id,user_id=user_id).first()
     
     if existing_attendance:
-        # Toggle attendance status
         existing_attendance.is_attending = not existing_attendance.is_attending
         message = "Attendance cancelled" if not existing_attendance.is_attending else "Attendance confirmed"
     else:
-        # Create new attendance record
         new_attendance = EventAttendance(
             event_id=event_id,
             user_id=user_id,
@@ -134,5 +115,19 @@ def toggle_attendance(event_id):
     return jsonify({
         "message": message,
         "is_attending": existing_attendance.is_attending if existing_attendance else True
-    }), 200
+    }), 200   
+    
+#Delete Event
+@event_bp.route("/event/<int:event_id>", methods=["DELETE"])
+def delete_event(event_id):
+    event = Event.query.get(event_id)
+
+    if event:
+        db.session.delete(event)
+        db.session.commit()
+        return jsonify({"success": "Deleted successfully"}), 200
+    else:
+        return jsonify({"error": "Event doesn't exist!"}), 404   
+    
+
 

@@ -6,16 +6,9 @@ import { EventContext } from '../context/EventContext';
 export default function Profile() {
     const { tasks = [], fetchTasks, deleteTask } = useContext(TaskContext);
     const { current_user } = useContext(UserContext);
-    const { userAttendingEvents, fetchUserAttendingEvents } = useContext(EventContext);
+    const { userAttendingEvents } = useContext(EventContext);
     
     const [assignedTasks, setAssignedTasks] = useState([]);
-
-    // Fetch tasks assigned to the current user
-    useEffect(() => {
-        if (current_user) {
-            fetchTasks();
-        }
-    }, [current_user]);
 
     // Filter tasks assigned to the current user
     useEffect(() => {
@@ -30,7 +23,7 @@ export default function Profile() {
         if (taskId) {
             deleteTask(taskId);
         } else {
-            console.error('Task ID is undefined');
+            console.error('Task not deleted');
         }
     };
 

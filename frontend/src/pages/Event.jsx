@@ -3,7 +3,7 @@ import { EventContext } from '../context/EventContext';
 import { UserContext } from '../context/UserContext';
 
 const Events = () => {
-  const { events, fetchEvents, toggleEventAttendance } = useContext(EventContext);
+  const { events, fetchEvents, EventAttendanceStatus } = useContext(EventContext);
   const { current_user, authToken } = useContext(UserContext);
   const [showForm, setShowForm] = useState(false);
   const [newEvent, setNewEvent] = useState({
@@ -78,7 +78,7 @@ const Events = () => {
 
   const handleAttendance = async (eventId) => {
     try {
-      await toggleEventAttendance(eventId);
+      await EventAttendanceStatus(eventId);
     } catch (error) {
       console.error('Error updating attendance:', error);
     }
@@ -179,7 +179,7 @@ const Events = () => {
                 </div>
               </div>
               
-              {/* Button Section - Always at bottom */}
+              {/* Button Section  */}
               <div className="pt-4 mt-auto">
                 <button
                   onClick={() => handleAttendance(event.id)}
