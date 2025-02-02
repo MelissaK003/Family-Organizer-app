@@ -3,9 +3,11 @@ from flask_migrate import Migrate
 from models import db,TokenBlocklist
 from datetime import timedelta
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
 app = Flask(__name__)
 
+CORS(app)
 # Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///family.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

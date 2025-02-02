@@ -36,32 +36,40 @@ def fetch_shoppinglist_by_id(shopping_id):
     else:
         return jsonify({"error": "Shopping list not found"}), 404
     
-#Add Shopping list    
 @shoppinglist_bp.route("/shoppinglist", methods=["POST"])
 def add_shoppinglist():
     data = request.get_json()
     
-    title =data.get('title')
+    title = data.get('title')
     items = data.get('item_names')  
-    quantity = data.get('quantity') 
-    added_by = data.get('user_id') 
+    quantities = data.get('quantity') 
+    added_by = data.get('user_id')  
 
-    if not items or not added_by:
-        return jsonify({"error": "Title and item names are required"}), 400
+    if not title or not items or not quantities or not added_by:
+        return jsonify({"error": "Title, item names, quantity, and user_id are required"}), 400
     
     check_user = User.query.get(added_by)
     if not check_user:
         return jsonify({"error": "User does not exist"}), 404
 
+    if len(items) != len(quantities):
+        return jsonify({"error": "Items and quantities lists must have the same length"}), 400
+
     shoppinglists = []
-    for item in items:
-        shoppinglist = Shoppinglist(title=title, item_name=item, quantity=quantity, added_by=added_by)
+    for i in range(len(items)):
+        shoppinglist = Shoppinglist(
+            title=title, 
+            item_name=items[i], 
+            quantity=quantities[i], 
+            added_by=added_by
+        )
         shoppinglists.append(shoppinglist)
 
     db.session.add_all(shoppinglists)
     db.session.commit()
 
     return jsonify({"success": f"{len(shoppinglists)} items added to shopping list(s)"}), 201
+
 
 #Update Shopping list
 @shoppinglist_bp.route("/shoppinglist/<int:shopping_id>", methods=["PATCH"])

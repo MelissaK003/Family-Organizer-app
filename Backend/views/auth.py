@@ -28,7 +28,7 @@ def login():
 @auth_bp.route("/current_user", methods=["GET"])
 @jwt_required()
 def current_user():
-    current_user_id  = get_jwt_identity()
+    current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
     
     if not user:
@@ -36,7 +36,9 @@ def current_user():
     
     return jsonify({
         'id': user.id,
-        'full_name': user.full_name
+        'full_name': user.full_name,
+        'email': user.email,
+        'role': user.role
     }), 200
 
 #Logout

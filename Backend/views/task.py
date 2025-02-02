@@ -1,5 +1,6 @@
 from flask import jsonify,request,Blueprint
 from models import Task,User,db
+from datetime import datetime
 
 task_bp = Blueprint("task_bp", __name__)
 
@@ -11,17 +12,16 @@ def fetch_tasks():
 
     for task in tasks:
         task_list.append({
-            'id': task.id,
             'title': task.title,
             'description': task.description,
             'completion_status': task.completion_status,
-            'deadline': task.deadline.strftime("%Y-%m-%d"), 
+            'deadline': task.deadline, 
             'assigned_to': task.assigned_to
         })
 
     return jsonify(task_list), 200
 
-#Add Task
+# Add Task
 @task_bp.route("/task", methods=["POST"])
 def add_task():
     data = request.get_json()
@@ -29,23 +29,34 @@ def add_task():
     title = data.get('title')
     description = data.get('description')
     deadline = data.get('deadline')
-    assigned_to = data.get('user_id')
+    assigned_to_name = data.get('assigned_to') 
 
-    if not title or not deadline or not assigned_to:
-        return jsonify({"error": "Missing required fields (title, deadline, or user_id)"}), 400
+    if not title or not deadline or not assigned_to_name:
+        return jsonify({"error": "Missing required fields (title, deadline, or assigned_to)"}), 400
+    
+    try:
+        deadline = datetime.strptime(deadline, "%Y-%m-%d").date() 
+    except ValueError:
+        return jsonify({"error": "Invalid event_date format. Use YYYY-MM-DD"}), 400
 
-    assigned_user = User.query.get(assigned_to)
+    assigned_user = User.query.filter_by(full_name=assigned_to_name).first()
     if not assigned_user:
         return jsonify({"error": "User does not exist"}), 404
 
     # Create and save the new task
-    new_task = Task(title=title, description=description, deadline=deadline, assigned_to=assigned_to)
+    new_task = Task(
+        title=title,
+        description=description,
+        deadline=deadline,
+        completion_status=False,
+        assigned_to=assigned_user.id  
+    )
     db.session.add(new_task)
     db.session.commit()
 
     return jsonify({"success": "Task added successfully"}), 201
 
-#Update Task
+# Update Task
 @task_bp.route("/task/<int:task_id>", methods=["PATCH"])
 def update_task(task_id):
     task = Task.query.get(task_id)
@@ -56,25 +67,26 @@ def update_task(task_id):
         title = data.get('title', task.title)  
         description = data.get('description', task.description)     
         deadline = data.get('deadline', task.deadline) 
-        completion_status = data.get('completion_status',task.completion_status)           
-        assigned_to= data.get('user_id', task.assigned_to)         
+        completion_status = data.get('completion_status', task.completion_status)
+        assigned_to_name = data.get('assigned_to')
 
-        assigned_user = User.query.get(assigned_to)
-        if not assigned_user:
-            return jsonify({"error": "User does not exist"}), 404
+        if assigned_to_name:
+            assigned_user = User.query.filter_by(full_name=assigned_to_name).first()
+            if not assigned_user:
+                return jsonify({"error": "User does not exist"}), 404
+            task.assigned_to = assigned_user.id
 
         task.title = title
         task.description = description
         task.deadline = deadline
         task.completion_status = completion_status
-        task.assigned_to= assigned_to
 
         db.session.commit()
         return jsonify({"success": "Task updated successfully"}), 200
 
     else:
         return jsonify({"error": "Task not found!"}), 404
-    
+
 #Delete Task
 @task_bp.route("/task/<int:task_id>", methods=["DELETE"])
 def delete_task(task_id):

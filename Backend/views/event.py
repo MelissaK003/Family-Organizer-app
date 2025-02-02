@@ -1,24 +1,34 @@
 from flask import jsonify,request,Blueprint
-from models import Event,User,db
+from models import Event,User,EventAttendance,db
+from datetime import datetime
 
 event_bp = Blueprint("event_bp", __name__)
 
 
-# Fetch Tasks
+# Fetch Events
 @event_bp.route("/events", methods=["GET"])
 def fetch_events():
+    user_id = request.args.get("user_id")
+    
     events = Event.query.all()
     event_list = []
-
+    
     for event in events:
+        is_attending = EventAttendance.query.filter_by(
+            event_id=event.id, 
+            user_id=user_id, 
+            is_attending=True
+        ).first() is not None
+        
         event_list.append({
             'id': event.id,
             'title': event.title,
             'description': event.description,
-            'event_date': event.event_date.strftime("%Y-%m-%d"), 
-            'created_by': event.created_by
+            'event_date': event.event_date.strftime("%Y-%m-%d"),
+            'created_by': event.created_by,
+            'is_attending': is_attending
         })
-
+    
     return jsonify(event_list), 200
 
 #Add Event
@@ -33,6 +43,11 @@ def add_event():
 
     if not title or not event_date :
         return jsonify({"error": "Missing required fields (title or Event Date)"}), 400
+    
+    try:
+        event_date = datetime.strptime(event_date, "%Y-%m-%d").date()  
+    except ValueError:
+        return jsonify({"error": "Invalid event_date format. Use YYYY-MM-DD"}), 400
 
     assigned_user = User.query.get(created_by)
     if not assigned_user:
@@ -83,3 +98,41 @@ def delete_event(event_id):
         return jsonify({"success": "Deleted successfully"}), 200
     else:
         return jsonify({"error": "Event doesn't exist!"}), 404   
+    
+@event_bp.route("/event_attendance/<int:event_id>", methods=["POST"])
+def toggle_attendance(event_id):
+    data = request.get_json()
+    user_id = data.get('user_id')
+    
+    if not user_id:
+        return jsonify({"error": "User ID is required"}), 400
+    
+    event = Event.query.get(event_id)
+    if not event:
+        return jsonify({"error": "Event not found"}), 404
+    
+    existing_attendance = EventAttendance.query.filter_by(
+        event_id=event_id,
+        user_id=user_id
+    ).first()
+    
+    if existing_attendance:
+        # Toggle attendance status
+        existing_attendance.is_attending = not existing_attendance.is_attending
+        message = "Attendance cancelled" if not existing_attendance.is_attending else "Attendance confirmed"
+    else:
+        # Create new attendance record
+        new_attendance = EventAttendance(
+            event_id=event_id,
+            user_id=user_id,
+            is_attending=True
+        )
+        db.session.add(new_attendance)
+        message = "Attendance confirmed"
+    
+    db.session.commit()
+    return jsonify({
+        "message": message,
+        "is_attending": existing_attendance.is_attending if existing_attendance else True
+    }), 200
+
